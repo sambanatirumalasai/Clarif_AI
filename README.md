@@ -1,5 +1,8 @@
 # &nbsp; &nbsp; &nbsp;  &nbsp;     &nbsp; &nbsp; &nbsp;  &nbsp;     &nbsp;  &nbsp; &nbsp;  &nbsp;     &nbsp;                           ClarifAI - The AI Book Companion
 
+# &nbsp; &nbsp; &nbsp;  &nbsp;     &nbsp; &nbsp; &nbsp;  &nbsp;     &nbsp;  &nbsp; &nbsp;  &nbsp;     &nbsp;      https://youtu.be/zBkteIFscHU
+
+
 "ClarifAI" is a web application that transforms any plain text book into a personal, interactive e-reader with AI-powered explanations, designed to enhance comprehension and create a beautiful, offline reading experience.
 
 ## Project Philosophy
