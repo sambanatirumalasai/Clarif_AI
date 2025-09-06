@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Your Book...</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif; background-color: #121212; color: #e0e0e0;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; margin: 0; text-align: center; flex-direction: column;
+        }
+        .container { max-width: 600px; padding: 2rem; }
+        h1 { font-size: 2.5rem; color: #fff; margin-bottom: 1.5rem; }
+        p { font-size: 1.2rem; color: #a9a9a9; margin-bottom: 2.5rem; }
+        .spinner {
+            border: 8px solid #333; border-top: 8px solid #58a6ff; border-radius: 50%;
+            width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 0 auto 1.5rem auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #status-message { font-style: italic; color: #ccc; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Annotating Your Book</h1>
+        <div class="spinner"></div>
+        <p>Estimated time: {{ estimate }} minutes. This may take longer for complex texts. Please keep this tab open.</p>
+        <p id="status-message">Initializing...</p>
+    </div>
+
+    <script>
+        // This function polls the server for the task's status
+        async function checkStatus() {
+            try {
+                const response = await fetch('/task-status');
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                const data = await response.json();
+                const statusElement = document.getElementById('status-message');
+
+                if (data.status === 'processing') {
+                    statusElement.textContent = `Processing... ${data.progress}% complete.`;
+                    // If still processing, check again in 3 seconds
+                    setTimeout(checkStatus, 3000);
+                } else if (data.status === 'complete') {
+                    statusElement.textContent = "Complete! Redirecting you to the reader...";
+                    // The task is done, redirect to the results page
+                    window.location.href = '/read';
+                } else if (data.status === 'failed') {
+                    statusElement.textContent = `An error occurred: ${data.message}`;
+                } else {
+                    // This handles the initial "pending" state before the task has updated its status
+                    setTimeout(checkStatus, 3000);
+                }
+            } catch (error) {
+                document.getElementById('status-message').textContent = 'Error checking status. Lost connection to server.';
+                console.error("Polling Error:", error);
+            }
+        }
+
+        // This function tells the server to start the background task
+        async function startTask() {
+            try {
+                const response = await fetch('/start-task', { method: 'POST' });
+                if (!response.ok) {
+                    throw new Error(`Failed to start task, server responded with status: ${response.status}`);
+                }
+                // Once the task is started, we begin polling for its status
+                document.getElementById('status-message').textContent = 'Task started. Waiting for the first update...';
+                setTimeout(checkStatus, 1000);
+            } catch (error) {
+                document.getElementById('status-message').textContent = 'Could not start the processing task. Please go back and try again.';
+                console.error("Start Task Error:", error);
+            }
+        }
+
+        // When the page is fully loaded, automatically call the startTask function
+        window.onload = startTask;
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        html { color-scheme: dark; }
+        body { background-color: #121212; color: #e0e0e0; font-family: 'Merriweather', Georgia, serif; font-size: 20px; line-height: 1.7; padding: 3rem 2rem; max-width: 800px; margin: auto; }
+        .main-title, .chapter-title { font-family: 'Algerian', sans-serif; color: #d4af37; text-align: center; text-shadow: 2px 2px 4px #000; }
+        .main-title { font-size: 3.5rem; margin-bottom: 4rem; }
+        .chapter-title { font-size: 2.5rem; margin-top: 3rem; margin-bottom: 2rem; border-bottom: none; text-shadow: 1px 1px 3px #000; scroll-margin-top: 2rem; }
+        .paragraph-container { margin-bottom: 1rem; } .paragraph-container p { text-indent: 2em; margin: 0; }
+        .image-container { margin: 2.5em 0; } img { max-width: 100%; height: auto; border-radius: 8px; display: block; margin: auto; }
+        .download-link { display: block; text-align: center; margin-top: 4rem; padding: 1rem; background-color: #d4af37; color: #121212; text-decoration: none; font-family: 'Lato', sans-serif; border-radius: 8px; transition: background-color 0.2s; }
+        .download-link:hover { background-color: #f6e27a; }
+
+        /* Styles for the TOC and Toggle Button */
+        #toc-toggle-btn { position: fixed; top: 20px; right: 20px; z-index: 1001; padding: 10px 15px; font-family: 'Lato', sans-serif; font-weight: bold; background-color: #d4af37; color: #121212; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        #toc-sidebar { display: none; position: fixed; top: 80px; right: 20px; width: 220px; background: #1e1e1e; padding: 1.5rem; border-radius: 8px; border: 1px solid #444; box-shadow: 0 4px 15px rgba(0,0,0,0.4); font-family: 'Lato', sans-serif; z-index: 1000; }
+        #toc-sidebar h3 { margin-top: 0; font-size: 1.2rem; color: #d4af37; border-bottom: 1px solid #555; padding-bottom: 0.5rem; }
+        #toc-sidebar ul { list-style: none; padding-left: 0; margin-bottom: 0; max-height: 60vh; overflow-y: auto; }
+        #toc-sidebar li { margin-bottom: 0.75em; } #toc-sidebar a { color: #c5c6c7; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; } #toc-sidebar a:hover { color: #f6e27a; }
+        @media (max-width: 1200px) { #toc-sidebar, #toc-toggle-btn { display: none; } }
+    </style>
+</head>
+<body>
+
+    <button id="toc-toggle-btn">Contents</button>
+    <div id="toc-sidebar">
+        <h3>Table of Contents</h3>
+        <ul>
+            {% for chapter in chapters %}
+                <li><a href="#{{ chapter.id }}">{{ chapter.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <h1 class="main-title">Reading Room</h1>
+
+    {% for chapter_title, contents in book.items() %}
+        {% set chapter_id = chapters | selectattr('title', 'equalto', chapter_title) | map(attribute='id') | first %}
+        <h2 class="chapter-title" id="{{ chapter_id }}">{{ chapter_title }}</h2>
+
+        {% for item in contents %}
+            {% if item.type == 'text' %}
+                <div class="paragraph-container">
+                    <p>{{ item.original }}</p>
+                </div>
+            {% elif item.type == 'image' %}
+                <div class="image-container">
+                    <img src="{{ item.url }}" alt="Book image">
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    <a href="{{ url_for('download') }}" class="download-link">Download Annotated Book</a>
+
+    <script>
+        document.getElementById('toc-toggle-btn').addEventListener('click', () => {
+            const toc = document.getElementById('toc-sidebar');
+            toc.style.display = toc.style.display === 'block' ? 'none' : 'block';
+        });
+        document.querySelectorAll('#toc-sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
