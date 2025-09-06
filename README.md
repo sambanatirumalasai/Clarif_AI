@@ -15,6 +15,15 @@ ClarifAI is more than just a document reader; it's a personal e-book **factory**
 * **High-Quality Design:** The final e-reader features a polished dark mode, professional typography (`Merriweather` & `Lato`), and a clean, user-friendly layout with a clickable Table of Contents.
 * **Rich Content Support:** Parses and displays both text paragraphs and embedded images from the source `.txt` file.
 
+## 🌙 Superior Reading Experience
+
+- **Dark Mode Ready:** The exported book can be viewed in dark mode, reducing eye strain and making long reading sessions more comfortable.
+- **Neat and Modern Formatting:** Clean organization of sections and paragraphs ensures clarity and easy navigation—far better than cluttered or static PDFs.
+- **AI-Powered Insights:** Explanations and annotations are seamlessly integrated for deeper understanding, making study and review effortless.
+- **Flexible Formats:** Output files (HTML, Markdown, etc.) can be opened on any device and customized to suit your reading preferences.
+
+> **Tip:** The downloadable zip file contains all enhanced content—just extract and open in your favorite viewer for the best experience!
+
 ## Tech Stack
 
 * **Backend:** Flask (Python)
