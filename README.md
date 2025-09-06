@@ -74,7 +74,7 @@ The application uses a "factory" model. The user provides a formatted .txt file 
 
 
 
-###### git clone \[https://github.com/]https://github.com/sambanatirumalasai/Clarif_AI.git
+###### https://github.com/sambanatirumalasai/Clarif_AI.git
 
 ###### cd clarif\_ai
 
