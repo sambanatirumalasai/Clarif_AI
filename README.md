@@ -44,7 +44,9 @@ Backend			: Flask (Python)
 
 AI     			: Google Generative AI (Gemini 1.5 Pro)Frontend: HTML, CSS, JavaScript (for status polling)
 
-Session Management	: Flask-Session (Filesystem-based)Concurrency: Python's threading for background tasks.
+Session Management	: Flask-Session (Filesystem-based)
+
+Concurrency: Python's threading for background tasks.
 
 
 
@@ -72,7 +74,7 @@ The application uses a "factory" model. The user provides a formatted .txt file 
 
 
 
-###### git clone \[https://github.com/](https://github.com/)\[your-username]/clarif\_ai.git
+###### git clone \[https://github.com/]https://github.com/sambanatirumalasai/Clarif_AI.git
 
 ###### cd clarif\_ai
 
